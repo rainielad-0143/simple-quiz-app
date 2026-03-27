@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import Choices from "./Choices";
+import Error from "./Error";
+import Score from "./Score";
 
 export default function Questions({ questions }) {
   const [selectedAnswer, setSelectedAnswer] = useState({});
@@ -38,7 +40,7 @@ export default function Questions({ questions }) {
     <div>
       {questions.map((item) => (
         <div key={item.id} style={{ marginBottom: "20px" }}>
-          <p>
+          <p style={{ marginBottom: "15px" }}>
             <strong>{item.question}</strong>
           </p>
           <Choices
@@ -50,23 +52,13 @@ export default function Questions({ questions }) {
         </div>
       ))}
 
-      {error && (
-        <p style={{ color: "red", fontWeight: "bold", marginBottom: "10px" }}>
-          {error}
-        </p>
-      )}
+      <Error error={error} />
 
       <button className="counter" onClick={handleSubmit}>
         Submit
       </button>
 
-      {score !== null && (
-        <div style={{ marginBottom: "20px" }}>
-          <h2>
-            Your score: {score} / {questions.length}
-          </h2>
-        </div>
-      )}
+      <Score score={score} questions={questions} />
     </div>
   );
 }

@@ -16,7 +16,8 @@ export default function Choices({
             value={choice}
             checked={selectedAnswer === choice}
             onChange={() => onSelect(choice)}
-          />{" "}
+            style={{ margin: "10px" }}
+          />
           {choice}
         </label>
       ))}

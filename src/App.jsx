@@ -19,6 +19,9 @@ function App() {
 
   return (
     <div>
+      <p style={{ margin: "20px 0" }}>
+        Instructions: Choose the letter of the correct answer.
+      </p>
       <Questions questions={questions} />
     </div>
   );
