@@ -52,13 +52,13 @@ export default function Questions({ questions }) {
         </div>
       ))}
 
-      <Error error={error} />
+      {error && <Error error={error} />}
 
       <button className="counter" onClick={handleSubmit}>
         Submit
       </button>
 
-      <Score score={score} questions={questions} />
+      {score !== null && <Score score={score} questions={questions} />}
     </div>
   );
 }
