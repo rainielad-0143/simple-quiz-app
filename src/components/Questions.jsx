@@ -1,18 +1,32 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Choices from "./Choices";
 import Error from "./Error";
 import Score from "./Score";
+import "../App.css";
 
 export default function Questions({ questions }) {
-  const [selectedAnswer, setSelectedAnswer] = useState({});
-  const [score, setScore] = useState(null);
   const [error, setError] = useState("");
+
+  const [score, setScore] = useState(() => {
+    const saved = localStorage.getItem("SCORE");
+    return saved ? JSON.parse(saved) : null;
+  });
+
+  const [selectedAnswer, setSelectedAnswer] = useState(() => {
+    const saved = localStorage.getItem("ANSWERS");
+    return saved ? JSON.parse(saved) : {};
+  });
+
+  useEffect(() => {
+    localStorage.setItem("ANSWERS", JSON.stringify(selectedAnswer));
+  }, [selectedAnswer]);
 
   const handleChange = (questionId, choice) => {
     setSelectedAnswer((prev) => ({
       ...prev,
       [questionId]: choice,
     }));
+    setError("");
   };
 
   const handleSubmit = () => {
@@ -21,19 +35,29 @@ export default function Questions({ questions }) {
     );
 
     if (unanswered) {
-      setError("Please answer all question before submitting!");
+      setError("Please answer all questions before submitting!");
       return;
     }
 
-    setError("");
-
     let newScore = 0;
+
     questions.forEach((question) => {
       if (selectedAnswer[question.id] === question.answer) {
-        newScore += 1;
+        newScore++;
       }
     });
+
     setScore(newScore);
+    localStorage.setItem("SCORE", JSON.stringify(newScore));
+  };
+
+  const handleReset = () => {
+    setSelectedAnswer({});
+    setScore(null);
+    setError("");
+
+    localStorage.removeItem("ANSWERS");
+    localStorage.removeItem("SCORE");
   };
 
   return (
@@ -56,6 +80,10 @@ export default function Questions({ questions }) {
 
       <button className="counter" onClick={handleSubmit}>
         Submit
+      </button>
+
+      <button className="counter" onClick={handleReset}>
+        Reset
       </button>
 
       {score !== null && <Score score={score} questions={questions} />}
