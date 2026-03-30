@@ -33,7 +33,7 @@ label {
 }
 
 label:hover {
-  background: #333333;
+  background: var(--border);
 }
 
 input[type="radio"] {
